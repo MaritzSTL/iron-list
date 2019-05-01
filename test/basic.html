@@ -216,29 +216,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
       assert.equal(getFirstItemFromList(list).textContent, '0');
     });
 
-    test('reset items should reset the scroll position', function() {
-      list.items = buildDataSet(100);
-      PolymerFlush();
-      list.scroll(0, 1000);
-      PolymerFlush();
-      assert.equal(list.style.overflowY, 'auto');
-      assert.equal(list._scrollTop, 1000);
-      list.items = buildDataSet(100);
-      PolymerFlush();
-      assert.equal(list._scrollTop, 0,
-          'should reset the scroll position');
-      list.style.paddingTop = '100px';
-      list.scrollTarget = document.documentElement;
-      list.updateViewportBoundaries();
-      list.scroll(0, 50);
-      assert.equal(list.style.overflowY, '');
-      assert.equal(list._scrollTop, 50);
-      list.items = buildDataSet(100);
-      PolymerFlush();
-      assert.equal(list._scrollTop, 50,
-          'should not reset the scroll position if the scrollTop is smaller than the paddingTop');
-    });
-
     test('visibility', function() {
       list.items = buildDataSet(100);
       PolymerFlush();

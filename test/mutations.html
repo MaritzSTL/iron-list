@@ -251,7 +251,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             list.items = list.items.slice(0);
             // NOTE(keanulee): you shouldn't need to call Polymer.flush() here (#475).
             requestAnimationFrame(function() {
-              assert.equal(getFirstItemFromList(list).textContent, '0');
+              assert.equal(getFirstItemFromList(list).textContent, '83');
 
               simulateScroll({
                 list: list,
