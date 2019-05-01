@@ -251,7 +251,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             list.items = list.items.slice(0);
             // NOTE(keanulee): you shouldn't need to call Polymer.flush() here (#475).
             requestAnimationFrame(function() {
-              assert.equal(getFirstItemFromList(list).textContent, '0');
+              assert.equal(getFirstItemFromList(list).textContent, '83');
 
               simulateScroll({
                 list: list,
@@ -353,6 +353,27 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         container.set('data.0.index', 'correct again');
         PolymerFlush();
         assert.equal(getFirstItemFromList(list).textContent, 'correct again');
+      });
+
+      test('Issue #300: update properties when item properties update', () => {
+        list.items = buildDataSet(10);
+        PolymerFlush();
+        list.scrollToIndex(1);
+        assert.equal(list.children[2].querySelector('#prop').innerHTML, '');
+        assert.equal(list.children[3].querySelector('#prop').innerHTML, '');
+        var item = list.items[1];
+        item.prop = 'prop';
+        list.splice('items', 1, 1, item);
+        PolymerFlush();
+        assert.equal(list.children[2].querySelector('#prop').innerHTML, '');
+        item = list.items[2];
+        item.prop = 'prop2';
+        list._propagateUpdates = function (item, instance) {
+          instance.notifyPath('item.prop', item.prop);
+        };
+        list.splice('items', 2, 1, item);
+        PolymerFlush();
+        assert.equal(list.children[3].querySelector('#prop').innerHTML, 'prop2');
       });
 
     });
