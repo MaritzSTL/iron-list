@@ -1083,9 +1083,6 @@ will only render 20.
         this._physicalItems = this._physicalItems || [];
         this._physicalSizes = this._physicalSizes || [];
         this._physicalStart = 0;
-        if (this._scrollTop > this._scrollOffset) {
-          this._resetScrollPosition(0);
-        }
         this._removeFocusedItem();
         this._debounce('_render', this._render, ANIMATION_FRAME);
       } else if (change.path === 'items.splices') {
@@ -1242,6 +1239,15 @@ will only render 20.
     },
 
     /**
+     * Can be used to expand the item update logic to include any fields that
+     *  you need to update within the template for your virtual item.
+     *
+     * @param {Object} item - the item that you passed in
+     * @param {Object} instance - the current instance in the list
+     */
+    _propagateUpdates: function(item, instance) {},
+
+    /**
      * Assigns the data models to a given set of items.
      * @param {!Array<number>=} itemSet
      */
@@ -1251,6 +1257,7 @@ will only render 20.
         var item = this.items && this.items[vidx];
         if (item != null) {
           var inst = this.modelForElement(el);
+          this._propagateUpdates(item, inst);
           inst.__key__ = this._collection ? this._collection.getKey(item) : null;
           this._forwardProperty(inst, this.as, item);
           this._forwardProperty(inst, this.selectedAs, this.$.selector.isSelected(item));
